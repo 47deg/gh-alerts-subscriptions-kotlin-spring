@@ -167,8 +167,6 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
-
-kotlin-js-store
 *.hprof
 
 # Env

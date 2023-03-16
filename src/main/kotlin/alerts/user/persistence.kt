@@ -22,6 +22,7 @@ data class UserDTO(
   val slackUserId: String
 )
 
+@Suppress("SpringDataRepositoryMethodReturnTypeInspection")
 interface UserRepo : CoroutineCrudRepository<UserDTO, Long> {
 
   suspend fun findBySlackUserId(slackUserId: String): UserDTO?

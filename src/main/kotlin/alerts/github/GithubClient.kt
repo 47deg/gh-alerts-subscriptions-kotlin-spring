@@ -11,24 +11,16 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
-import kotlin.time.Duration.Companion.seconds
 
 fun interface GithubClient {
   suspend fun repositoryExists(owner: String, name: String): Either<GithubError, Boolean>
 }
 
-private const val DEFAULT_GITHUB_RETRY_COUNT = 3
-
-private val DEFAULT_GITHUB_RETRY_SCHEDULE: Schedule<Throwable, Unit> =
-  Schedule.recurs<Throwable>(DEFAULT_GITHUB_RETRY_COUNT)
-    .and(Schedule.exponential(1.seconds))
-    .void()
-
 @Component
 class DefaultGithubClient(
   private val config: Github,
   private val httpClient: WebClient,
-  private val retryPolicy: Schedule<Throwable, Unit> = DEFAULT_GITHUB_RETRY_SCHEDULE,
+  private val retryPolicy: Schedule<Throwable, Unit>
 ) : GithubClient {
   val logger = KotlinLogging.logger { }
 

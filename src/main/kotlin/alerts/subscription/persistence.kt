@@ -76,6 +76,7 @@ interface SubscriptionRepo : CoroutineCrudRepository<SubscriptionDTO, Long> {
 
 }
 
+@Suppress("SpringDataRepositoryMethodReturnTypeInspection")
 interface RepositoryRepo : CoroutineCrudRepository<RepositoryDTO, Long> {
     suspend fun findByOwnerAndRepository(owner: String, repository: String): Long?
 
