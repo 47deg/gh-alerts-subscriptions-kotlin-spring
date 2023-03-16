@@ -16,15 +16,34 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
-@Controller
-class SubscriptionController(
-  private val service: SubscriptionService,
-  private val clock: Clock,
-  private val timeZone: TimeZone
-) {
+interface SubscriptionController {
   @GetMapping("/subscription")
   suspend fun get(
     @RequestParam("slackUserId") slackUserId: String
+  ): ResponseEntity<Subscriptions>
+
+  @PostMapping("/subscription")
+  suspend fun post(
+    @RequestParam("slackUserId") slackUserId: String,
+    @RequestBody repository: Repository
+  ): ResponseEntity<*>
+
+  @DeleteMapping("/subscription")
+  suspend fun delete(
+    @RequestParam("slackUserId") slackUserId: String,
+    @RequestBody repository: Repository
+  ): ResponseEntity<Nothing>
+}
+
+@Controller
+class DefaultSubscriptionController(
+  private val service: SubscriptionService,
+  private val clock: Clock,
+  private val timeZone: TimeZone
+) : SubscriptionController {
+
+  override suspend fun get(
+    slackUserId: String
   ): ResponseEntity<Subscriptions> =
     either {
       val subscriptions = service.findAll(SlackUserId(slackUserId))
@@ -34,10 +53,10 @@ class SubscriptionController(
       ResponseEntity.ok(Subscriptions(subscriptions))
     }.merge()
 
-  @PostMapping("/subscription")
-  suspend fun post(
-    @RequestParam("slackUserId") slackUserId: String,
-    @RequestBody repository: Repository
+
+  override suspend fun post(
+    slackUserId: String,
+    repository: Repository
   ): ResponseEntity<*> =
     service.subscribe(SlackUserId(slackUserId), Subscription(repository, clock.now().toLocalDateTime(timeZone)))
       .fold(
@@ -45,10 +64,9 @@ class SubscriptionController(
         { ResponseEntity.status(HttpStatus.CREATED).body(it) }
       )
 
-  @DeleteMapping("/subscription")
-  suspend fun delete(
-    @RequestParam("slackUserId") slackUserId: String,
-    @RequestBody repository: Repository
+  override suspend fun delete(
+    slackUserId: String,
+    repository: Repository
   ): ResponseEntity<Nothing> =
     service.unsubscribe(SlackUserId(slackUserId), repository)
       .fold(
