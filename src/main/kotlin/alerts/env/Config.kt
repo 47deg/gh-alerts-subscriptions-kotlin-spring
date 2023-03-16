@@ -148,11 +148,11 @@ class AppConfig {
       .void()
 }
 
-fun <K, V> receiverOptions(
-    topicName: String,
-    properties: Properties,
-    keySerializer: KSerializer<K>,
-    valueSerializer: KSerializer<V>
+fun <K, V> receiverOptions (
+  topicName: String,
+  properties: Properties,
+  keySerializer: KSerializer<K>,
+  valueSerializer: KSerializer<V>
 ): ReceiverOptions<K, V> =
     ReceiverOptions.create<K, V>(properties)
         .subscription(listOf(topicName))

@@ -12,6 +12,14 @@ kafka:
   bootstrapServers: ${BOOTSTRAP_SERVERS:localhost:9092}
   schemaRegistryUrl: ${SCHEMA_REGISTRY_URL:http://localhost:8081}
 
+  consumer:
+    groupId: github-event-consumer
+    autoOffsetReset: earliest
+    enableAutoCommit: false
+
+  producer:
+    acks: 1
+
   subscription:
     name: ${SUBSCRIPTION_TOPIC:subscriptions}
     numPartitions: 1
