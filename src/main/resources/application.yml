@@ -2,7 +2,7 @@ server:
   port: ${PORT:8080}
   address: ${host:0.0.0.0}
   servlet:
-      context-path: /
+    context-path: /
 
 github:
   url: ${GITHUB_URL:https://api.github.com}
@@ -53,10 +53,10 @@ spring:
     password: ${POSTGRES_USER:test}
 
 springdoc:
-    enable-native-support: true
-    show-actuator: true
-    swagger-ui:
-        use-root-path: true
+  enable-native-support: true
+  show-actuator: true
+  swagger-ui:
+    use-root-path: true
 
 management:
   endpoint:
