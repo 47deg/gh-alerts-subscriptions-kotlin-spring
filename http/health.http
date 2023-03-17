@@ -1,0 +1,18 @@
+
+### Health
+{{serviceUrl}}/actuator/health
+
+### Readiness state
+{{serviceUrl}}/actuator/health/readinessState
+
+### Liveness state
+{{serviceUrl}}/actuator/health/livenessState
+
+### Kafka health
+{{serviceUrl}}/actuator/health/kafka
+
+### R2DBC health
+{{serviceUrl}}/actuator/health/r2dbc
+
+### Flyway health
+{{serviceUrl}}/actuator/health/flyway

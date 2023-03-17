@@ -1,0 +1,21 @@
+
+### Create subscription for a slack user id
+POST {{serviceUrl}}/subscription?slackUserId=arrow-kt
+Content-Type: application/json
+
+{
+  "owner": "arrow-kt",
+  "name": "arrow"
+}
+
+### List subscriptions by slack user id
+GET {{serviceUrl}}/subscription?slackUserId=arrow-kt
+
+### Delete subscription for a slack user id
+DELETE {{serviceUrl}}/subscription?slackUserId=arrow-kt
+Content-Type: application/json
+
+{
+  "owner": "arrow-kt",
+  "name": "arrow"
+}
