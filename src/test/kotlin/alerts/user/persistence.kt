@@ -1,11 +1,7 @@
-package alerts.persistence
+package alerts.user
 
 import alerts.IntegrationTestBase
 import alerts.TestMetrics
-import alerts.user.DefaultUserPersistence
-import alerts.user.SlackUserId
-import alerts.user.UserId
-import alerts.user.UserRepo
 import arrow.core.nonEmptyListOf
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
@@ -14,8 +10,8 @@ import io.kotest.matchers.shouldBe
 import org.springframework.transaction.reactive.TransactionalOperator
 
 class UserPersistenceSpec(
-    userRepo: UserRepo,
-    transactionOperator: TransactionalOperator
+    private val userRepo: UserRepo,
+    private val transactionOperator: TransactionalOperator
 ) : IntegrationTestBase({
 
     val slackUserId = SlackUserId("test-user-id")
@@ -61,7 +57,7 @@ class UserPersistenceSpec(
         val users = nonEmptyListOf(
             persistence.insertSlackUser(slackUserId),
             persistence.insertSlackUser(SlackUserId("test-user-id-2")),
-            persistence.insertSlackUser(SlackUserId("test-user-id-3")),
+            persistence.insertSlackUser(SlackUserId("test-user-id-3"))
         )
         val ids = users.map { it.userId }
         persistence.findUsers(ids) shouldBe users
