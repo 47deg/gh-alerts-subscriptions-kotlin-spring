@@ -9,9 +9,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.springframework.http.HttpStatusCode
 
-@JvmInline
-value class RepositoryId(val serial: Long)
-
 @Serializable
 @AvroNamespace("alerts.domain.repository")
 data class Repository(val owner: String, val name: String)

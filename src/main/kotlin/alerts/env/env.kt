@@ -36,26 +36,43 @@ data class NotificationTopic @ConstructorBinding constructor(
   override val replicationFactor: Short,
 ): Topic
 
+@ConfigurationProperties("kafka.consumer")
+data class KafkaConsumer @ConstructorBinding constructor(
+  val groupId: String,
+  val autoOffsetReset: String,
+  val enableAutoCommit: String,
+)
+
+@ConfigurationProperties("kafka.producer")
+data class KafkaProducer @ConstructorBinding constructor(
+  val acks: String
+)
+
 @ConfigurationProperties("kafka")
 data class Kafka @ConstructorBinding constructor(
   val bootstrapServers: String,
   val schemaRegistryUrl: String,
+  val consumer: KafkaConsumer,
+  val producer: KafkaProducer,
   val subscription: SubscriptionTopic,
   val event: EventTopic,
   val notification: NotificationTopic,
 ) {
-  private val eventConsumerGroupId = "github-event-consumer"
 
-  fun consumerProperties() = Properties().apply {
-    put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
-    put(ConsumerConfig.GROUP_ID_CONFIG, eventConsumerGroupId)
-    put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
-    put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
+  fun consumerProperties() = with(consumer) {
+    Properties().apply {
+      put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
+      put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
+      put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset)
+      put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, enableAutoCommit)
+    }
   }
 
-  fun producerProperties() = Properties().apply {
-    put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
-    put(ProducerConfig.ACKS_CONFIG, "1")
+  fun producerProperties() = with(producer) {
+    Properties().apply {
+      put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
+      put(ProducerConfig.ACKS_CONFIG, acks)
+    }
   }
 }
 

@@ -3,14 +3,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("DSL_SCOPE_VIOLATION") plugins {
   application
+  alias(libs.plugins.kotlin.spring)
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.kotest.multiplatform)
   alias(libs.plugins.kover)
+  alias(libs.plugins.spring)
+  alias(libs.plugins.dependency.management)
   id(libs.plugins.detekt.pluginId)
-  id("org.springframework.boot") version "3.0.4"
-  id("io.spring.dependency-management") version "1.1.0"
-  kotlin("jvm")
-  kotlin("plugin.spring") version "1.7.22"
+  id(libs.plugins.kotlin.jvm.pluginId)
 }
 
 buildscript {
@@ -74,37 +74,29 @@ tasks {
 }
 
 dependencies {
-  implementation("org.springframework.boot:spring-boot-starter-webflux")
-  implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.kafka:spring-kafka")
-  implementation("org.postgresql:r2dbc-postgresql:1.0.1.RELEASE")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib")
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-  implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-  implementation("io.projectreactor.kafka:reactor-kafka:1.3.15")
-
+  implementation(libs.bundles.spring)
   implementation(libs.bundles.arrow)
+  implementation(libs.reactor.kafka)
+  implementation(libs.reactor.kotlin.extensions)
   implementation(libs.logback.classic)
   implementation(libs.postgresql)
+  implementation(libs.r2dbc.postgres)
   implementation(libs.flyway)
   implementation(libs.klogging)
   implementation(libs.avro4k)
-
   implementation(libs.kafka.schema.registry)
   implementation(libs.kafka.avro.serializer)
   implementation(libs.avro)
-
+  implementation(libs.kotlin.stdlib)
   implementation(libs.kotlinx.serialization.jsonpath)
-
+  implementation(libs.kotlinx.coroutines.reactor)
   implementation(libs.micrometer.prometheus)
-
   implementation(libs.kotlinx.datetime)
 
+  // mac users
   runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.89.Final:osx-aarch_64")
 
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-
+  annotationProcessor(libs.spring.configuration.processor)
   testImplementation(libs.bundles.kotest)
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation(libs.spring.test)
 }

@@ -2,7 +2,7 @@ server:
   port: ${PORT:8080}
   address: ${host:0.0.0.0}
   servlet:
-      context-path: /
+    context-path: /
 
 github:
   url: ${GITHUB_URL:https://api.github.com}
@@ -11,6 +11,14 @@ github:
 kafka:
   bootstrapServers: ${BOOTSTRAP_SERVERS:localhost:9092}
   schemaRegistryUrl: ${SCHEMA_REGISTRY_URL:http://localhost:8081}
+
+  consumer:
+    groupId: github-event-consumer
+    autoOffsetReset: earliest
+    enableAutoCommit: false
+
+  producer:
+    acks: 1
 
   subscription:
     name: ${SUBSCRIPTION_TOPIC:subscriptions}
@@ -45,10 +53,10 @@ spring:
     password: ${POSTGRES_USER:test}
 
 springdoc:
-    enable-native-support: true
-    show-actuator: true
-    swagger-ui:
-        use-root-path: true
+  enable-native-support: true
+  show-actuator: true
+  swagger-ui:
+    use-root-path: true
 
 management:
   endpoint:

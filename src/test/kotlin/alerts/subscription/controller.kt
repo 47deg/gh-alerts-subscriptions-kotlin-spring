@@ -19,7 +19,7 @@ import kotlin.random.Random
 @Suppress("MatchingDeclarationName")
 class SubscriptionControllerSpec : StringSpec({
     val testRepo = Repository("foo", "bar")
-    val controller = SubscriptionController(service, clock, timeZone)
+    val controller = DefaultSubscriptionController(service, clock, timeZone)
 
     suspend fun <A> subscriptions(test: suspend WebTestClient.() -> A): A = with(
         WebTestClient.bindToController(controller).configureClient().build()
